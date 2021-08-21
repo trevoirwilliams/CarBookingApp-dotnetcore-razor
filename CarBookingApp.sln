@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarBookingApp", "CarBookingApp\CarBookingApp.csproj", "{4BAF7B5F-F728-4074-9C9D-9617DFFAC989}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarBookingApp.Data", "CarBookingApp.Data\CarBookingApp.Data.csproj", "{B3FE0583-B0CE-432B-8A48-D73D130DC4B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BAF7B5F-F728-4074-9C9D-9617DFFAC989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BAF7B5F-F728-4074-9C9D-9617DFFAC989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BAF7B5F-F728-4074-9C9D-9617DFFAC989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BAF7B5F-F728-4074-9C9D-9617DFFAC989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3FE0583-B0CE-432B-8A48-D73D130DC4B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3FE0583-B0CE-432B-8A48-D73D130DC4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3FE0583-B0CE-432B-8A48-D73D130DC4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3FE0583-B0CE-432B-8A48-D73D130DC4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8459521-EC95-4339-8A28-C64DA9422444}
+	EndGlobalSection
+EndGlobal
