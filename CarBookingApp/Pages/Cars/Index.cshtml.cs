@@ -24,5 +24,23 @@ namespace CarBookingApp.Pages.Cars
         {
             Cars = await _context.Cars.ToListAsync();
         }
+
+        public async Task<IActionResult> OnPostDelete(int? carid)
+        {
+            if (carid == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Cars.FindAsync(carid);
+
+            if (car != null)
+            {
+                _context.Cars.Remove(car);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage();
+        }
     }
 }

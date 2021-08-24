@@ -8,14 +8,14 @@
 <h1>List Of Cars</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-primary" asp-page="Create"> <i class="fa fa-plus" aria-hidden="true"></i> Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Cars[0].Year)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Cars[0].Name)
             </th>
@@ -25,18 +25,56 @@
     <tbody>
 @foreach (var item in Model.Cars) {
         <tr>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Year)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                
+                    <a class="btn btn-warning" asp-page="./Update" asp-route-id="@item.Id">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Edit
+                    </a> 
+                    <a class="btn btn-info" asp-page="./Details" asp-route-id="@item.Id">
+                        <i class="fa fa-book-open" aria-hidden="true"></i> Details
+                    </a> 
+                    <button class="btn btn-danger deleteBtn" data-id="@item.Id">
+                        <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                    </button>
+                
+                @*<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<form id="deleteFrom" asp-page-handler="delete"method="post">
+    <input type="hidden" name="carid" id="carid"/>
+</form>
+    @section Scripts{
+        <script>
+            $(function () {
+
+                $('.deleteBtn').click(function (e) {
+                    swal({
+                        title: "Are you sure?",
+                        text: "Are you sure you want to delete this record?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                    }).then((confirm) => {
+                        if (confirm) {
+                            var btn = $(this);
+                            var id = btn.data("id");
+                            $('#carid').val(id);
+                            $('#deleteFrom').submit();
+                        }
+                    });
+
+                });
+
+            });
+        </script>
+    }
