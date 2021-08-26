@@ -10,5 +10,8 @@ namespace CarBookingApp.Data
         }
 
         public DbSet<Car> Cars { get; set; }
+        public DbSet<Make> Makes { get; set; }
+        public DbSet<CarModel> CarModels { get; set; }
+        public DbSet<Colour> Colours { get; set; }
     }
 }

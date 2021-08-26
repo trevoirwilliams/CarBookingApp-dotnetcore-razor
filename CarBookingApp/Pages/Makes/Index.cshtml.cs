@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.Makes
 {
     public class IndexModel : PageModel
     {
@@ -18,15 +18,11 @@ namespace CarBookingApp.Pages.Cars
             _context = context;
         }
 
-        public IList<Car> Cars { get;set; }
+        public IList<Make> Make { get;set; }
 
         public async Task OnGetAsync()
         {
-            Cars = await _context.Cars
-                .Include(q => q.Make)
-                .Include(q => q.CarModel)
-                .Include(q => q.Colour)
-                .ToListAsync();
+            Make = await _context.Makes.ToListAsync();
         }
 
         public async Task<IActionResult> OnPostDelete(int? recordid)
@@ -36,15 +32,16 @@ namespace CarBookingApp.Pages.Cars
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(recordid);
+            var makes = await _context.Makes.FindAsync(recordid);
 
-            if (car != null)
+            if (makes != null)
             {
-                _context.Cars.Remove(car);
+                _context.Makes.Remove(makes);
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToPage();
         }
+
     }
 }

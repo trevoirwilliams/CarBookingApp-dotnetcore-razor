@@ -1,0 +1,23 @@
+﻿@page
+@model CarBookingApp.Pages.CarModels.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Car Model</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CarModel.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CarModel.Name)
+        </dd>
+
+    </dl>
+</div>
+@await Html.PartialAsync("_DetailButtonsPartial", Model.CarModel.Id)

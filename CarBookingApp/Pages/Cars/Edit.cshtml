@@ -1,17 +1,18 @@
 ﻿@page
-@model CarBookingApp.Pages.Cars.CreateModel
+@model CarBookingApp.Pages.Cars.EditModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
 }
 
-<h1>Create Car</h1>
+<h1>Edit Car</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Car.Id" />
             <div class="form-group">
                 <label asp-for="Car.MakeId" class="control-label"></label>
                 <select id="makes" class="form-control" asp-for="Car.MakeId" asp-items="Model.Makes">
@@ -43,7 +44,8 @@
                 <input asp-for="Car.LicensePlateNumber" class="form-control" />
                 <span asp-validation-for="Car.LicensePlateNumber" class="text-danger"></span>
             </div>
-            <partial name="_CreateFormButtonPartial" />
+            <partial name="_EditButtonsPartial" />
+
         </form>
     </div>
 </div>
@@ -51,5 +53,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/CascadingModelsDropdownListScript.js" modelId="0"></script>
+    <script src="~/js/CascadingModelsDropdownListScript.js" modelId="@Model.Car.CarModelId"></script>
+
 }

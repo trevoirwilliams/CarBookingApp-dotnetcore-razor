@@ -1,0 +1,14 @@
+﻿
+@model int
+@{
+}
+
+<a class="btn btn-warning" asp-page="./Edit" asp-route-id="@Model">
+    <i class="fa fa-edit" aria-hidden="true"></i> Edit
+</a>
+<a class="btn btn-info" asp-page="./Details" asp-route-id="@Model">
+    <i class="fa fa-book-open" aria-hidden="true"></i> Details
+</a>
+<button class="btn btn-danger deleteBtn" data-id="@Model">
+    <i class="fa fa-trash" aria-hidden="true"></i> Delete
+</button>

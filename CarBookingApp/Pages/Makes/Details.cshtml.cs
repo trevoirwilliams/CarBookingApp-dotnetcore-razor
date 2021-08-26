@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.Makes
 {
     public class DetailsModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace CarBookingApp.Pages.Cars
             _context = context;
         }
 
-        public Car Car { get; set; }
+        public Make Make { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,13 +27,9 @@ namespace CarBookingApp.Pages.Cars
                 return NotFound();
             }
 
-            Car = await _context.Cars
-                .Include(q => q.Make)
-                .Include(q => q.CarModel)
-                .Include(q => q.Colour)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Make = await _context.Makes.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (Car == null)
+            if (Make == null)
             {
                 return NotFound();
             }

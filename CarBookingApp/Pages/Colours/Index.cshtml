@@ -1,0 +1,41 @@
+﻿@page
+@model CarBookingApp.Pages.Colours.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Colours</h1>
+
+<partial name="_CreateButtonPartial" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Colour[0].Name)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Colour)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>
+                    @await Html.PartialAsync("_IndexButtonsPartial", item.Id)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_IndexDeleteFormPartial" />
+@section Scripts{
+    <script src="~/js/IndexDeleteButtonScript.js"></script>
+}

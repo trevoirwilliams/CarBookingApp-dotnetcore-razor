@@ -1,0 +1,38 @@
+﻿@page
+@model CarBookingApp.Pages.CarModels.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CarModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CarModel.Name" class="control-label"></label>
+                <input asp-for="CarModel.Name" class="form-control" />
+                <span asp-validation-for="CarModel.Name" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="CarModel.Id" />
+            <div class="form-group">
+                <label asp-for="CarModel.MakeId" class="control-label"></label>
+                <select class="form-control" asp-for="CarModel.MakeId" asp-items="Model.Makes">
+                    <option>Select Make</option>
+                </select>
+                <span asp-validation-for="CarModel.MakeId" class="text-danger"></span>
+            </div>
+            <partial name="_EditButtonsPartial" />
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

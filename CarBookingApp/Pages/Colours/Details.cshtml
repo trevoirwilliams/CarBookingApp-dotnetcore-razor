@@ -1,0 +1,23 @@
+﻿@page
+@model CarBookingApp.Pages.Colours.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Colour</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Colour.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Colour.Name)
+        </dd>
+    </dl>
+</div>
+@await Html.PartialAsync("_DetailButtonsPartial", Model.Colour.Id)
+

@@ -8,25 +8,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.Makes
 {
-    public class UpdateModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
 
-        public UpdateModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public EditModel(CarBookingApp.Data.CarBookingAppDbContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Car Car { get; set; }
+        public Make Make { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Car = await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            if (Car == null)
+            Make = await _context.Makes.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Make == null)
             {
                 return NotFound();
             }
@@ -42,7 +47,7 @@ namespace CarBookingApp.Pages.Cars
                 return Page();
             }
 
-            _context.Attach(Car).State = EntityState.Modified;
+            _context.Attach(Make).State = EntityState.Modified;
 
             try
             {
@@ -50,7 +55,7 @@ namespace CarBookingApp.Pages.Cars
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarExists(Car.Id))
+                if (!MakeExists(Make.Id))
                 {
                     return NotFound();
                 }
@@ -63,9 +68,9 @@ namespace CarBookingApp.Pages.Cars
             return RedirectToPage("./Index");
         }
 
-        private bool CarExists(int id)
+        private bool MakeExists(int id)
         {
-            return _context.Cars.Any(e => e.Id == id);
+            return _context.Makes.Any(e => e.Id == id);
         }
     }
 }
