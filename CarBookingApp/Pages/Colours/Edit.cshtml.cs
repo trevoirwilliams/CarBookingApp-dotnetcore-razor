@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
 
 namespace CarBookingApp.Pages.Colours
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly IGenericRepository<Colour> _repository;
 
-        public EditModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public EditModel(IGenericRepository<Colour> repository)
         {
-            _context = context;
+            this._repository = repository;
         }
 
         [BindProperty]
@@ -29,7 +30,7 @@ namespace CarBookingApp.Pages.Colours
                 return NotFound();
             }
 
-            Colour = await _context.Colours.FirstOrDefaultAsync(m => m.Id == id);
+            Colour = await _repository.Get(id.Value);
 
             if (Colour == null)
             {
@@ -47,15 +48,13 @@ namespace CarBookingApp.Pages.Colours
                 return Page();
             }
 
-            _context.Attach(Colour).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.Update(Colour);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ColourExists(Colour.Id))
+                if (!await ColourExistsAsync(Colour.Id))
                 {
                     return NotFound();
                 }
@@ -68,9 +67,9 @@ namespace CarBookingApp.Pages.Colours
             return RedirectToPage("./Index");
         }
 
-        private bool ColourExists(int id)
+        private async Task<bool> ColourExistsAsync(int id)
         {
-            return _context.Colours.Any(e => e.Id == id);
+            return await _repository.Exists(id);
         }
     }
 }

@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
 
 namespace CarBookingApp.Pages.Cars
 {
     public class DetailsModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly ICarsRepository _repository;
 
-        public DetailsModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public DetailsModel(ICarsRepository repository)
         {
-            _context = context;
+            this._repository = repository;
         }
 
         public Car Car { get; set; }
@@ -27,11 +28,7 @@ namespace CarBookingApp.Pages.Cars
                 return NotFound();
             }
 
-            Car = await _context.Cars
-                .Include(q => q.Make)
-                .Include(q => q.CarModel)
-                .Include(q => q.Colour)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Car = await _repository.GetCarWithDetails(id.Value);
 
             if (Car == null)
             {

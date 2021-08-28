@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
 
 namespace CarBookingApp.Pages.Colours
 {
     public class CreateModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly IGenericRepository<Colour> _repository;
 
-        public CreateModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public CreateModel(IGenericRepository<Colour> repository)
         {
-            _context = context;
+            this._repository = repository;
         }
 
         public IActionResult OnGet()
@@ -34,8 +35,7 @@ namespace CarBookingApp.Pages.Colours
                 return Page();
             }
 
-            _context.Colours.Add(Colour);
-            await _context.SaveChangesAsync();
+            await _repository.Insert(Colour);
 
             return RedirectToPage("./Index");
         }

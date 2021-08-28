@@ -7,16 +7,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
+using CarBookingApp.Repositories.Repositories;
 
 namespace CarBookingApp.Pages.Cars
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly ICarsRepository _carRepository;
+        private readonly IGenericRepository<CarModel> _carModelRepository;
+        private readonly IGenericRepository<Colour> _colourRepository;
+        private readonly IGenericRepository<Make> _makesRepository;
 
-        public EditModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public EditModel(ICarsRepository carRepository,
+            IGenericRepository<Make> makesRepository,
+            IGenericRepository<CarModel> carModelRepository,
+            IGenericRepository<Colour> colourRepository
+        )
         {
-            _context = context;
+            this._carRepository = carRepository;
+            this._carModelRepository = carModelRepository;
+            this._colourRepository = colourRepository;
+            this._makesRepository = makesRepository;
         }
 
         [BindProperty]
@@ -28,7 +40,7 @@ namespace CarBookingApp.Pages.Cars
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Car = await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            Car = await _carRepository.Get(id.Value);
 
             if (Car == null)
             {
@@ -44,21 +56,24 @@ namespace CarBookingApp.Pages.Cars
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            if (await _carRepository.IsLicencePlateExists(Car.LicensePlateNumber))
+            {
+                ModelState.AddModelError(nameof(Car.LicensePlateNumber), "License Plate Number Exists Already");
+            }
+
             if (!ModelState.IsValid)
             {
                 await LoadInitialData();
                 return Page();
             }
 
-            _context.Attach(Car).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _carRepository.Update(Car);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarExists(Car.Id))
+                if (!await CarExistsAsync(Car.Id))
                 {
                     return NotFound();
                 }
@@ -73,14 +88,14 @@ namespace CarBookingApp.Pages.Cars
 
         private async Task LoadInitialData()
         {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
-            Models = new SelectList(await _context.CarModels.ToListAsync(), "Id", "Name");
-            Colours = new SelectList(await _context.Colours.ToListAsync(), "Id", "Name");
+            Makes = new SelectList(await _makesRepository.GetAll(), "Id", "Name");
+            Models = new SelectList(await _carModelRepository.GetAll(), "Id", "Name");
+            Colours = new SelectList(await _colourRepository.GetAll(), "Id", "Name");
         }
 
-        private bool CarExists(int id)
+        private async Task<bool> CarExistsAsync(int id)
         {
-            return _context.Cars.Any(e => e.Id == id);
+            return await _carRepository.Exists(id);
         }
     }
 }

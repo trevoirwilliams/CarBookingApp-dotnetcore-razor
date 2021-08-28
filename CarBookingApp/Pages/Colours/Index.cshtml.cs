@@ -6,23 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
 
 namespace CarBookingApp.Pages.Colours
 {
     public class IndexModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly IGenericRepository<Colour> _repository;
 
-        public IndexModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public IndexModel(IGenericRepository<Colour> repository)
         {
-            _context = context;
+            this._repository = repository;
         }
 
         public IList<Colour> Colour { get;set; }
 
         public async Task OnGetAsync()
         {
-            Colour = await _context.Colours.ToListAsync();
+            Colour = await _repository.GetAll();
         }
 
         public async Task<IActionResult> OnPostDelete(int? recordid)
@@ -32,13 +33,7 @@ namespace CarBookingApp.Pages.Colours
                 return NotFound();
             }
 
-            var colour = await _context.Colours.FindAsync(recordid);
-
-            if (colour != null)
-            {
-                _context.Colours.Remove(colour);
-                await _context.SaveChangesAsync();
-            }
+            await _repository.Delete(recordid.Value);
 
             return RedirectToPage();
         }

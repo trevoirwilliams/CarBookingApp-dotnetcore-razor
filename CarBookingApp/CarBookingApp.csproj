@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CarBookingApp.Data\CarBookingApp.Data.csproj" />
+    <ProjectReference Include="..\CarBookingApp.Repositories\CarBookingApp.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

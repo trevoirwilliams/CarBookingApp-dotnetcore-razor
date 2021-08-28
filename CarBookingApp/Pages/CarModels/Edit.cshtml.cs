@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CarBookingApp.Data;
+using CarBookingApp.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CarBookingApp.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CarBookingApp.Pages.CarModels
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingApp.Data.CarBookingAppDbContext _context;
+        private readonly IGenericRepository<CarModel> _carModelrepository;
+        private readonly IGenericRepository<Make> _makesRepository;
 
-        public EditModel(CarBookingApp.Data.CarBookingAppDbContext context)
+        public EditModel(IGenericRepository<CarModel> carModelrepository, IGenericRepository<Make> makesRepository)
         {
-            _context = context;
+            this._carModelrepository = carModelrepository;
+            this._makesRepository = makesRepository;
         }
 
         [BindProperty]
@@ -30,7 +31,7 @@ namespace CarBookingApp.Pages.CarModels
                 return NotFound();
             }
 
-            CarModel = await _context.CarModels.FirstOrDefaultAsync(m => m.Id == id);
+            CarModel = await _carModelrepository.Get(id.Value);
 
             if (CarModel == null)
             {
@@ -51,15 +52,13 @@ namespace CarBookingApp.Pages.CarModels
                 return Page();
             }
 
-            _context.Attach(CarModel).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _carModelrepository.Update(CarModel);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarModelExists(CarModel.Id))
+                if (!await CarModelExistsAsync(CarModel.Id))
                 {
                     return NotFound();
                 }
@@ -74,12 +73,12 @@ namespace CarBookingApp.Pages.CarModels
 
         private async Task LoadInitialData()
         {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
+            Makes = new SelectList(await _makesRepository.GetAll(), "Id", "Name");
         }
 
-        private bool CarModelExists(int id)
+        private async Task<bool> CarModelExistsAsync(int id)
         {
-            return _context.CarModels.Any(e => e.Id == id);
+            return await _carModelrepository.Exists(id);
         }
     }
 }
