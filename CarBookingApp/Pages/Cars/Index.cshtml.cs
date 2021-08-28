@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingApp.Data;
 using CarBookingApp.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarBookingApp.Pages.Cars
 {

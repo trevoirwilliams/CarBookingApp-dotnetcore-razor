@@ -1,8 +1,12 @@
 using CarBookingApp.Data;
+using CarBookingApp.Data.Identity;
 using CarBookingApp.Repositories.Contracts;
 using CarBookingApp.Repositories.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,11 +32,17 @@ namespace CarBookingApp
                     Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddDefaultIdentity<ApplicationUser>(options => { options.SignIn.RequireConfirmedAccount = false; })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<CarBookingAppDbContext>();
+
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICarModelsRepository, CarModelsRepository>();
             services.AddScoped<ICarsRepository, CarsRepository>();
 
-            services.AddRazorPages();
+            services.AddAuthorization();
+
+            services.AddRazorPages(o => { o.Conventions.AuthorizeFolder("/"); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +64,7 @@ namespace CarBookingApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

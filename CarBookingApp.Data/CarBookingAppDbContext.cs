@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CarBookingApp.Data.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarBookingApp.Data
 {
-    public class CarBookingAppDbContext : DbContext
+    public class CarBookingAppDbContext : IdentityDbContext<ApplicationUser>
     {
         public CarBookingAppDbContext(DbContextOptions<CarBookingAppDbContext> options) : base(options)
         {
